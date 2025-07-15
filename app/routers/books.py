@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
 from app.schemas import book as book_schema
@@ -10,7 +10,7 @@ from app.models.user import User
 
 router = APIRouter()
 
-@router.post("/", response_model=book_schema.Book)
+@router.post("/", response_model=book_schema.Book, status_code=status.HTTP_201_CREATED)
 def create_book(
     book: book_schema.BookCreate, 
     db: Session = Depends(get_db),
@@ -46,7 +46,7 @@ def update_book(
         raise HTTPException(status_code=404, detail="Book not found")
     return db_book
 
-@router.delete("/{book_id}", response_model=book_schema.Book)
+@router.delete("/{book_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_book(
     book_id: int, 
     db: Session = Depends(get_db),
@@ -56,4 +56,4 @@ def delete_book(
     db_book = book_service.delete_book(db, book_id=book_id)
     if db_book is None:
         raise HTTPException(status_code=404, detail="Book not found")
-    return db_book 
+    return Response(status_code=status.HTTP_204_NO_CONTENT) 

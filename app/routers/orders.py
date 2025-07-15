@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
 from app.schemas import order as order_schema
@@ -10,7 +10,7 @@ from app.models.user import User
 
 router = APIRouter()
 
-@router.post("/", response_model=order_schema.Order)
+@router.post("/", response_model=order_schema.Order, status_code=status.HTTP_201_CREATED)
 def create_order(
     order: order_schema.OrderCreate,
     db: Session = Depends(get_db),

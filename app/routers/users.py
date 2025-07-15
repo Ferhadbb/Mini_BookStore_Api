@@ -12,7 +12,7 @@ from app.core.config import ACCESS_TOKEN_EXPIRE_MINUTES
 
 router = APIRouter()
 
-@router.post("/register", response_model=user_schema.User)
+@router.post("/register", response_model=user_schema.User, status_code=status.HTTP_201_CREATED)
 def register_user(user: user_schema.UserCreate, db: Session = Depends(get_db)):
 
     db_user = user_service.get_user_by_email(db, email=user.email)
