@@ -40,7 +40,6 @@ def update_book(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-
     db_book = book_service.update_book(db, book_id=book_id, book_update=book)
     if db_book is None:
         raise HTTPException(status_code=404, detail="Book not found")
